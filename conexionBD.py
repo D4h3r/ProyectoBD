@@ -17,8 +17,8 @@ class Registro_datos():
     def inserta_producto(self, id, stock, nombreProd, precio, marca, descuento, urlImagen, descripcion, categoria):
         cur = self.conexion.cursor()
         sql = '''INSERT INTO Producto (id, stock, nombreProd, precio, marca, descuento, urlImagen, descripcion, categoria)
-        VALUES('{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}')'''.format(id, stock, nombreProd, precio, marca, descuento, urlImagen, descripcion, categoria)
-        cur.execute(sql)
+        VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+        cur.execute(sql, (id, stock, nombreProd, precio, marca, descuento, urlImagen, descripcion, categoria))
         self.conexion.commit()    
         cur.close()
         
@@ -28,34 +28,34 @@ class Registro_datos():
         cursor.execute(sql)
         registro = cursor.fetchall()
         return registro
-
+ 
     def busca_producto(self, id):
         cur = self.conexion.cursor()
-        sql = "SELECT * FROM Producto WHERE id = {}".format(id)
-        cur.execute(sql)
+        sql = "SELECT * FROM Producto WHERE id = %s"
+        cur.execute(sql, (id,))
         nombreX = cur.fetchall()
         cur.close()     
-        return nombreX 
+        return nombreX
 
     def elimina_productos(self,nombre):
         cur = self.conexion.cursor()
-        sql='''DELETE FROM Producto WHERE NOMBREPROD = {}'''.format(nombre)
-        cur.execute(sql)
+        sql = '''DELETE FROM Producto WHERE NOMBREPROD = %s'''
+        cur.execute(sql, (nombre,))
         a = cur.rowcount
         self.conexion.commit()    
         cur.close()
-        return a   
+        return a
 
 
     def actualiza_productos(self, stock, nombreProd, precio, marca, descuento, urlImagen, descripcion, categoria):
         cur = self.conexion.cursor()
-        sql ='''UPDATE Producto SET  
-        WHERE NOMBRE = '{}' '''.format(stock, nombreProd, precio, marca, descuento, urlImagen, descripcion, categoria)
-        cur.execute(sql)
+        sql ='''UPDATE Producto SET stock = %s, nombreProd = %s, precio = %s, marca = %s, descuento = %s, urlImagen = %s, descripcion = %s, categoria = %s
+        WHERE NOMBRE = %s'''
+        cur.execute(sql, (stock, nombreProd, precio, marca, descuento, urlImagen, descripcion, categoria))
         a = cur.rowcount
         self.conexion.commit()    
         cur.close()
-        return a  
+        return a
 
 #####################################################################################################################################################
 
